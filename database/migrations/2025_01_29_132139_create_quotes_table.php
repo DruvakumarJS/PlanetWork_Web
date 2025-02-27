@@ -20,13 +20,13 @@ return new class extends Migration
             $table->string('quote_date');
             $table->string('expiry_date');
             $table->string('sub_total');
-            $table->string('discount_percentage');
-            $table->string('discount_amount');
-            $table->string('adjustment');
-            $table->string('grant_total');
-            $table->string('customer_note');
-            $table->string('terms');
-            $table->string('status');
+            $table->string('discount_percentage')->nullable();
+            $table->string('discount_amount')->nullable();
+            $table->string('adjustment')->nullable();
+            $table->string('grant_total')->nullable();
+            $table->string('customer_note')->nullable();
+            $table->string('terms')->nullable();
+            $table->string('status')->nullable();
             $table->string('user_id');
 
             $table->timestamps();

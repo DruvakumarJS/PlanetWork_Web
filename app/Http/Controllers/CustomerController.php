@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Enquiry;
 use App\Models\Address;
 use App\Models\Product;
+use App\Models\Quote;
 use Auth;
 
 class CustomerController extends Controller
@@ -285,40 +286,84 @@ class CustomerController extends Controller
         return view('quote.create',compact('data','products'));
     }
 
-    public function save_quote(){
+    public function save_quote(Request $request, $id){
+
+       // print_r($request->input());die();
+
+        $cust_data = Customer::where('id',$id)->first();
+
+
+
         $request->validate([
-        'items' => 'required|array|min:1',
-        'qty' => 'required|array|min:1',
-        'rate' => 'required|array|min:1',
-        'tax' => 'required|array|min:1',
-        'amount' => 'required|array|min:1',
-        'items.*' => 'required|string', // Ensure each item is selected
-        'qty.*' => 'required|numeric|min:1', // Quantity must be a number >= 1
-        'rate.*' => 'required|numeric|min:0', // Rate must be a number >= 0
-        'tax.*' => 'required|numeric|min:0', // Tax must be a number >= 0
-        'amount.*' => 'required|numeric|min:0', // Amount must be a number >= 0
-    ]);
-
-    // Get the data from the request
-    $items = $request->input('items');
-    $quantities = $request->input('qty');
-    $rates = $request->input('rate');
-    $taxes = $request->input('tax');
-    $amounts = $request->input('amount');
-
-    // Loop through the data and save each row
-    foreach ($items as $index => $item) {
-        DB::table('your_table_name')->insert([
-            'item' => $item,
-            'quantity' => $quantities[$index],
-            'rate' => $rates[$index],
-            'tax' => $taxes[$index],
-            'amount' => $amounts[$index],
-            'created_at' => now(),
-            'updated_at' => now(),
+            'items' => 'required|array|min:1',
+            'qty' => 'required|array|min:1',
+            'rate' => 'required|array|min:1',
+            'tax' => 'required|array|min:1',
+            'amount' => 'required|array|min:1',
+            'items.*' => 'required|string', // Ensure each item is selected
+            'qty.*' => 'required|numeric|min:1', // Quantity must be a number >= 1
+            'rate.*' => 'required|numeric|min:0', // Rate must be a number >= 0
+            'tax.*' => 'required|numeric|min:0', // Tax must be a number >= 0
+            'amount.*' => 'required|numeric|min:0', // Amount must be a number >= 0
         ]);
+
+        // Get the data from the request
+        $items = $request->input('items');
+        $quantities = $request->input('qty');
+        $rates = $request->input('rate');
+        $taxes = $request->input('tax');
+        $amounts = $request->input('amount');
+
+
+        $quote = new Quote;
+        $quote->customer_id = $id;
+        $quote->billing_address = $request->billingaddress;
+        $quote->shipping_address = $request->shippingaddress ;
+        $quote->quote_number = $request->quote_no;
+        $quote->quote_date = $request->quote_date;
+        $quote->expiry_date = $request->quote_expiry;
+        $quote->sub_total = $request->subtotal;
+        $quote->discount_percentage = $request->discount;
+        $quote->discount_amount = $request->discounted_amount;
+        $quote->adjustment = $request->adjustment;
+        $quote->grant_total = $request->finalTotal;
+        $quote->customer_note = $request->note;
+        $quote->terms = $request->tc;
+        $quote->status = $request->btn_name;
+        $quote->user_id = Auth::user()->id;
+
+        $quote->save();
+
+        $quoteID=$quote->id;
+
+
+
+
+        // Loop through the data and save each row
+       /* foreach ($items as $index => $item) {
+            DB::table('your_table_name')->insert([
+                'item' => $item,
+                'quantity' => $quantities[$index],
+                'rate' => $rates[$index],
+                'tax' => $taxes[$index],
+                'amount' => $amounts[$index],
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }*/
+
+        return redirect()->back()->with('success', 'Rows added successfully!');
+
     }
 
-    return redirect()->back()->with('success', 'Rows added successfully!');
+
+    public function view_quote(){
+        $data = Quote::where('user_id',Auth::user()->id)->get();
+        
+        return view('quote.list',compact('data'));
+
     }
+
+   
+
 }

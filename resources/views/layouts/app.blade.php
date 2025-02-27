@@ -120,7 +120,7 @@
 
         <a href="{{route('enquiry')}}"><img src="/images/product.svg"> <label class="ms-2 font1">Enquiry</label> </a>
 
-        <a href=""><img src="/images/product.svg"> <label class="ms-2 font1">Quote</label> </a>
+        <a href="{{route('view_quote')}}"><img src="/images/product.svg"> <label class="ms-2 font1">Quote</label> </a>
 
         <a href=""><img src="/images/product.svg"> <label class="ms-2 font1">Perform Invoice</label> </a>
 

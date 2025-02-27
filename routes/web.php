@@ -44,6 +44,12 @@ Route::put('/update-customer/{id}', [CustomerController::class, 'update'])->name
 
 Route::get('/create-quote/{id}', [CustomerController::class, 'create_quote'])->name('create_quote');
 
+Route::post('/save-quote/{id}', [CustomerController::class, 'save_quote'])->name('save_quote');
+
+Route::get('/view-quote', [CustomerController::class, 'view_quote'])->name('view_quote');
+
+
+
 
 Route::post('/save-product', [ProductController::class, 'store'])->name('save_product');
 

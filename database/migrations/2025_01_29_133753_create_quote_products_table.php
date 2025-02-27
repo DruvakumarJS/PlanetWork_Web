@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('product_id');
             $table->string('revised_price')->nullable();
             $table->string('quantity');
+            $table->string('tax');
             $table->string('amount');
             $table->timestamps();
         });

@@ -22,7 +22,8 @@
 </style>
 
 <div class="container">
-<form method="POST" action="">
+<form method="POST" action="{{route('save_quote',$data->id)}}">
+  @csrf
 <div class="row justify-content-center">
     <div>
        <label class="bold">Create Quote</label>
@@ -76,9 +77,9 @@
   <div class="col-4">
     <label class="font1-bold">Billing Address</label>
     <div class="card">
-      <select class="form-control form-select border border-black rounded-0" id="billingaddress" >
+      <select class="form-control form-select border border-black rounded-0" name="billingaddress" id="billingaddress" >
         @foreach($data->addresses as $key=>$value)
-         <option>{{$value->billing_address_line_1}},{{$value->billing_address_line_2}} ,{{$value->billing_city}},{{$value->billing_state}} ,{{$value->billing_pincode}}</option>
+         <option value="{{$value->id}}">{{$value->billing_address_line_1}},{{$value->billing_address_line_2}} ,{{$value->billing_city}},{{$value->billing_state}} ,{{$value->billing_pincode}}</option>
         @endforeach
       </select>
       <div class="card-body">
@@ -91,9 +92,9 @@
   <div class="col-4">
     <label class="font1-bold">Shipping Address</label>
     <div class="card">
-      <select class="form-control form-select border border-black rounded-0" id="shippingaddress">
+      <select class="form-control form-select border border-black rounded-0" name="shippingaddress" id="shippingaddress">
         @foreach($data->addresses as $key=>$value)
-         <option>{{$value->shipping_address_line_1}}, {{$value->shipping_address_line_2}}, {{$value->shipping_city}},{{$value->shipping_state}}, {{$value->shipping_pincode}}</option>
+         <option value="{{$value->id}}">{{$value->shipping_address_line_1}}, {{$value->shipping_address_line_2}}, {{$value->shipping_city}},{{$value->shipping_state}}, {{$value->shipping_pincode}}</option>
         @endforeach
       </select>
       <div class="card-body">
@@ -114,14 +115,14 @@
   <div class="col-2">
     <div class="form-group">
       <label class="font1">Quote Date</label>
-      <input type="text" name="quote_no" class="form-control" value="{{date('Y-m-d')}}" readonly>
+      <input type="text" name="quote_date" class="form-control" value="{{date('Y-m-d')}}" readonly>
     </div>
   </div>
 
   <div class="col-2">
     <div class="form-group">
       <label class="font1">Expiry Date</label>
-      <input type="text" name="quote_no" class="form-control" value="{{date('Y-m-d',strtotime('+10 days')) }}" readonly>
+      <input type="text" name="quote_expiry" class="form-control" value="{{date('Y-m-d',strtotime('+10 days')) }}" readonly>
     </div>
   </div>
 </div>
@@ -132,7 +133,7 @@
   <div id="rowContainer">
     <!-- Default Row with Labels -->
     <div class="row align-items-center mb-2"> 
-      <div class="col-4">
+      <div class="col-3">
         <div class="form-group">
           <span>Add Items</span>
           <select class="form-control form-select border-black" name="items[]" onchange="setAmount(this)">
@@ -176,7 +177,7 @@
         </div>
       </div>
 
-      <div class="col-1">
+      <div class="col-2">
         <div class="form-group">
           <span>Amount</span>
           <input class="form-control amount-input" type="text" name="amount[]" onkeydown="numbersonly(event)">
@@ -230,7 +231,7 @@
             <label for="inputPassword6" class="col-form-label">Sub Total</label>
           </div>
           <div class="col-auto">
-            <input class="form-control" type="text" id="subtotal" readonly name="">
+            <input class="form-control" type="text" name="subtotal" id="subtotal" readonly name="">
           </div>
           
         </div>
@@ -244,7 +245,7 @@
             <label for="inputPassword6" class="col-form-label" >Discount in %</label>
           </div>
           <div class="col-auto">
-            <input type="text" id="discount" class="form-control">
+            <input type="text" id="discount" name="discount" class="form-control">
           </div>
           
         </div>
@@ -258,7 +259,7 @@
             <label for="inputPassword6" class="col-form-label" >Discounted Amount</label>
           </div>
           <div class="col-auto">
-            <input type="text" id="discounted_amount" class="form-control" readonly>
+            <input type="text" id="discounted_amount" name="discounted_amount" class="form-control" readonly>
           </div>
           
         </div>
@@ -272,7 +273,7 @@
             <label for="inputPassword6" class="col-form-label">Adjustment</label>
           </div>
           <div class="col-auto">
-            <input class="form-control" type="text" id="adjustment" name="">
+            <input class="form-control" type="text" id="adjustment" name="adjustment">
           </div>
           
         </div>
@@ -286,7 +287,7 @@
             <label for="inputPassword6" class="col-form-label">Grand Total</label>
           </div>
           <div class="col-auto">
-            <input type="text" id="finalTotal" class="form-control" readonly>
+            <input type="text" id="finalTotal" name="finalTotal" class="form-control" readonly>
           </div>
           
         </div>
@@ -304,23 +305,22 @@
           </div>
           
         </div>
-     </div>
   </div>
 
   <div class=" col-8 form-group py-4">
      <label class="font1-bold">Customer Note</label>
-    <textarea class="form-control"  style="min-height: 100px;"></textarea>
+    <textarea class="form-control" name="note"  style="min-height: 100px;"></textarea>
   </div>
 
    <div class=" col-8 form-group py-2">
      <label class="font1-bold">Terms and Condition</label>
-    <textarea class="form-control"  style="min-height: 100px;"></textarea>
+    <textarea class="form-control" name="tc" style="min-height: 100px;"></textarea>
   </div>
 
   <div class="py-4">
-     <button type="submit" class="btn btn-dark">Save as Draft</button>
-     <button type="submit" class="btn btn-dark">Convert to Proforma Invoice</button>
-     <button type="submit" class="btn btn-dark">Convert to  Invoice</button>
+     <button type="submit" class="btn btn-dark" name="btn_name" value="draft">Save as Draft</button>
+     <button type="submit" class="btn btn-dark" name="btn_name" value="PI">Convert to Proforma Invoice</button>
+     <button type="submit" class="btn btn-dark" name="btn_name" value="invoice">Convert to  Invoice</button>
   </div>
 
 </form> 

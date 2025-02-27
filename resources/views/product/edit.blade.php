@@ -92,7 +92,7 @@
                  <div class="col-8">
                    <div class="form-group">
                      <label>Product Description</label>
-                     <textarea class="form-control border-black" name="desc">{{$data->desc}}</textarea>
+                     <textarea class="form-control border-black" name="desc">{{$data->product_desc}}</textarea>
                    </div>
                  </div>
                </div>
