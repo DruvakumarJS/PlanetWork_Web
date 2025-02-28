@@ -122,9 +122,9 @@
 
         <a href="{{route('view_quote')}}"><img src="/images/product.svg"> <label class="ms-2 font1">Quote</label> </a>
 
-        <a href=""><img src="/images/product.svg"> <label class="ms-2 font1">Perform Invoice</label> </a>
+        <a href="{{route('performa_invoice')}}"><img src="/images/product.svg"> <label class="ms-2 font1">Proforma  Invoice</label> </a>
 
-        <a href=""><img src="/images/product.svg"> <label class="ms-2 font1">Invoice</label> </a>
+        <a href="{{route('invoice')}}"><img src="/images/product.svg"> <label class="ms-2 font1">Invoice</label> </a>
 
         <a class="pt-3" href=""><label class="font-small">HUMAN RESORCE</label></a>
 

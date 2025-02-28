@@ -4,9 +4,10 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Quote extends Model
+class Invoice extends Model
 {
     protected $fillable = [
+    	'quote_id',
         'customer_id',
 	    'billing_address',
 	    'shipping_address',

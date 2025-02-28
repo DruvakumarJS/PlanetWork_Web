@@ -48,6 +48,21 @@ Route::post('/save-quote/{id}', [CustomerController::class, 'save_quote'])->name
 
 Route::get('/view-quote', [CustomerController::class, 'view_quote'])->name('view_quote');
 
+Route::get('/view-quote-details/{id}', [CustomerController::class, 'view_quote_details'])->name('view_quote_details');
+
+Route::get('/edit-quote/{id}', [CustomerController::class, 'edit_quote'])->name('edit_quote');
+
+Route::put('/update-quote/{id}', [CustomerController::class, 'update_quote'])->name('update_quote');
+
+Route::get('/convert-to-perfoma-invoice/{id}', [CustomerController::class, 'convert_to_pi'])->name('convert_to_pi');
+
+Route::get('/convert-to-invoice/{id}', [CustomerController::class, 'convert_to_invoice'])->name('convert_to_invoice');
+
+Route::get('/performa-invoices', [CustomerController::class, 'performa_invoice'])->name('performa_invoice');
+Route::get('/view-performa-invoice_details/{id}', [CustomerController::class, 'performa_invoice_details'])->name('performa_invoice_details');
+
+Route::get('/invoices', [CustomerController::class, 'invoice'])->name('invoice');
+Route::get('/invoices-details/{id}', [CustomerController::class, 'invoice_details'])->name('invoice_details');
 
 
 

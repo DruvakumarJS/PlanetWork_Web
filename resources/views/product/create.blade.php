@@ -181,7 +181,7 @@
   });
 
    $('#tax_preference').on('change', function() {
-    alert(this.value);
+    
     if (this.value == 'Taxable') {
         $('#inter').prop('required',true);
         $('#intra').prop('required',true);

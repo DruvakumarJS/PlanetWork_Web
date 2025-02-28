@@ -8,6 +8,9 @@ use App\Models\Enquiry;
 use App\Models\Address;
 use App\Models\Product;
 use App\Models\Quote;
+use App\Models\QuoteProduct;
+use App\Models\PerformaInvoice;
+use App\Models\Invoice;
 use Auth;
 
 class CustomerController extends Controller
@@ -202,7 +205,7 @@ class CustomerController extends Controller
            ]);
         }
         else{
-            print_r("lll222");die();
+           
             $update = Customer::where('id',$customerid)->update([
                 'gst' => $request->gstin,
                 'treatment' => $request->treatment,
@@ -288,7 +291,7 @@ class CustomerController extends Controller
 
     public function save_quote(Request $request, $id){
 
-       // print_r($request->input());die();
+       // print_r(json_encode($request->input()));die();
 
         $cust_data = Customer::where('id',$id)->first();
 
@@ -336,33 +339,221 @@ class CustomerController extends Controller
 
         $quoteID=$quote->id;
 
-
-
-
-        // Loop through the data and save each row
-       /* foreach ($items as $index => $item) {
-            DB::table('your_table_name')->insert([
-                'item' => $item,
+ // Loop through the data and save each row
+        foreach ($items as $index => $item) {
+           QuoteProduct::create([
+                'quote_id' => $quoteID,
+                'product_id' => $item,
+                'revised_price' => $rates[$index],
                 'quantity' => $quantities[$index],
-                'rate' => $rates[$index],
                 'tax' => $taxes[$index],
                 'amount' => $amounts[$index],
-                'created_at' => now(),
-                'updated_at' => now(),
             ]);
-        }*/
-
-        return redirect()->back()->with('success', 'Rows added successfully!');
+        }
+        
+        return redirect()->route('view_quote');
 
     }
 
 
     public function view_quote(){
-        $data = Quote::where('user_id',Auth::user()->id)->get();
+        $data = Quote::where('user_id',Auth::user()->id)->orderBy('id','DESC')->get();
         
         return view('quote.list',compact('data'));
 
     }
+
+    public function view_quote_details($id){
+        $quoteData = Quote::where('id',$id)->where('user_id',Auth::user()->id)->first();
+        $data = Customer::where('id',$quoteData->customer_id)->first();
+        $products = Product::get();
+        return view('quote.details',compact('data','quoteData','products'));
+
+    }
+
+    public function edit_quote($id){
+        $quoteData = Quote::where('id',$id)->where('user_id',Auth::user()->id)->first();
+        $data = Customer::where('id',$quoteData->customer_id)->first();
+        $products = Product::get();
+        return view('quote.edit',compact('data','quoteData','products'));
+    }
+
+    public function update_quote(Request $request , $id){
+
+      //  print_r(json_encode($request->input()));die();
+        
+        $cust_data = Customer::where('id',$request->customer_id)->first();
+
+        $request->validate([
+            'items' => 'required|array|min:1',
+            'qty' => 'required|array|min:1',
+            'rate' => 'required|array|min:1',
+            'tax' => 'required|array|min:1',
+            'amount' => 'required|array|min:1',
+            'items.*' => 'required|string', // Ensure each item is selected
+            'qty.*' => 'required|numeric|min:1', // Quantity must be a number >= 1
+            'rate.*' => 'required|numeric|min:0', // Rate must be a number >= 0
+            'tax.*' => 'required|numeric|min:0', // Tax must be a number >= 0
+            'amount.*' => 'required|numeric|min:0', // Amount must be a number >= 0
+        ]);
+
+        // Get the data from the request
+        $items = $request->input('items');
+        $quantities = $request->input('qty');
+        $rates = $request->input('rate');
+        $taxes = $request->input('tax');
+        $amounts = $request->input('amount');
+        $quote_prod_id = $request->input('quote_prod_id');
+
+
+        $quote = Quote::where('id',$id)->first();
+        $quote->billing_address = $request->billingaddress;
+        $quote->shipping_address = $request->shippingaddress ;
+        $quote->sub_total = $request->subtotal;
+        $quote->discount_percentage = $request->discount;
+        $quote->discount_amount = $request->discounted_amount;
+        $quote->adjustment = $request->adjustment;
+        $quote->grant_total = $request->finalTotal;
+        $quote->customer_note = $request->note;
+        $quote->terms = $request->tc;
+        $quote->status = $request->btn_name;
+        $quote->user_id = Auth::user()->id;
+
+        $quote->save();
+         
+         QuoteProduct::where('quote_id',$id)->whereNotIn('id',$quote_prod_id)->delete();
+         
+       
+ // Loop through the data and save each row
+        foreach ($items as $index => $item) {
+          
+
+          $QuotProdutc = QuoteProduct::where('id',$quote_prod_id[$index] ?? null)->first();
+
+          if($QuotProdutc){
+             $QuotProdutc->product_id = $item;
+             $QuotProdutc->revised_price = $rates[$index];
+             $QuotProdutc->quantity = $quantities[$index];
+             $QuotProdutc->tax = $taxes[$index];
+             $QuotProdutc->amount = $amounts[$index];
+             $QuotProdutc->save();
+          }
+          else{
+            QuoteProduct::create([
+                'quote_id' => $id,
+                'product_id' => $item,
+                'revised_price' => $rates[$index],
+                'quantity' => $quantities[$index],
+                'tax' => $taxes[$index],
+                'amount' => $amounts[$index],
+            ]);
+          }
+
+
+
+           
+        }
+        
+        return redirect()->route('view_quote_details',$id);
+    }
+
+    public function convert_to_pi($id){
+
+        $data = Quote::where('id',$id)->first();
+        // print_r($data);die();
+
+        $quote = new PerformaInvoice;
+        $quote->quote_id=$id;
+        $quote->customer_id = $data->customer_id;
+        $quote->billing_address = $data->billing_address;
+        $quote->shipping_address = $data->shipping_address ;
+        $quote->quote_number = $data->quote_number;
+        $quote->quote_date = $data->quote_date;
+        $quote->expiry_date = $data->expiry_date;
+        $quote->sub_total = $data->sub_total;
+        $quote->discount_percentage = $data->discount_percentage;
+        $quote->discount_amount = $data->discount_amount;
+        $quote->adjustment = $data->adjustment;
+        $quote->grant_total = $data->grant_total;
+        $quote->customer_note = $data->customer_note;
+        $quote->terms = $data->terms;
+        $quote->status = 'Profoma Invoice';
+        $quote->user_id = Auth::user()->id;
+        $quote->save();
+
+        $quoteID=$quote->id;
+
+        if($quoteID != ''){
+            Quote::where('id',$id)->update(['status'=>'Perform Invoice' , 'perfoma_invoice'=>'1']);
+            return redirect()->route('performa_invoice');
+        }
+
+
+    }
+
+    public function performa_invoice(){
+      $data = PerformaInvoice::where('user_id',Auth::user()->id)->orderBy('id','DESC')->get();
+
+      return view('pinvoice.list',compact('data'));
+    }
+
+    public function performa_invoice_details($id){
+        $quoteData = Quote::where('id',$id)->where('user_id',Auth::user()->id)->first();
+        $data = Customer::where('id',$quoteData->customer_id)->first();
+        $products = Product::get();
+        return view('pinvoice.details',compact('data','quoteData','products'));
+
+    }
+
+
+
+     public function convert_to_invoice($id){
+       
+        $data = Quote::where('id',$id)->first();
+
+
+        $quote = new Invoice;
+        $quote->quote_id=$id;
+        $quote->customer_id = $data->customer_id;
+        $quote->billing_address = $data->billing_address;
+        $quote->shipping_address = $data->shipping_address ;
+        $quote->quote_number = $data->quote_number;
+        $quote->quote_date = $data->quote_date;
+        $quote->expiry_date = $data->expiry_date;
+        $quote->sub_total = $data->sub_total;
+        $quote->discount_percentage = $data->discount_percentage;
+        $quote->discount_amount = $data->discount_amount;
+        $quote->adjustment = $data->adjustment;
+        $quote->grant_total = $data->grant_total;
+        $quote->customer_note = $data->customer_note;
+        $quote->terms = $data->terms;
+        $quote->status = 'Invoice';
+        $quote->user_id = Auth::user()->id;
+        $quote->save();
+
+        $quoteID=$quote->id;
+
+        if($quoteID != ''){
+            Quote::where('id',$id)->update(['status'=>'Invoice' , 'invoice'=>'1']);
+            return redirect()->route('invoice');
+        }
+    }
+   
+    public function invoice(){
+      $data = Invoice::where('user_id',Auth::user()->id)->orderBy('id','DESC')->get();
+
+      return view('invoices.list',compact('data'));
+    }
+
+    public function invoice_details($id){
+        $quoteData = Quote::where('id',$id)->where('user_id',Auth::user()->id)->first();
+        $data = Customer::where('id',$quoteData->customer_id)->first();
+        $products = Product::get();
+        return view('invoices.details',compact('data','quoteData','products'));
+
+    }
+
+
 
    
 

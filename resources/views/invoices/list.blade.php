@@ -6,7 +6,7 @@
     <div class="row justify-content-center">
         <div class="container-header">
           <div id="div2">
-            <a href=""><button class="btn btn-outline-secondary">Quotations</button></a>
+            <a href="{{route('view_quote')}}"><button class="btn btn-outline-secondary">Quotations</button></a>
           </div>
            
           <div id="div2" style="margin-right: 30px">
@@ -36,7 +36,7 @@
  
        
         <div class="">
-           <label class="bold py-4" style="margin-left: 20px" >Quotations</label>
+           <label class="bold py-4" style="margin-left: 20px" >Invoices</label>
 
            <table class="table table-striped">
               <thead>
@@ -63,7 +63,7 @@
                   <td>{{$value->grant_total}}</td>
                   <td>{{$value->status}}</td>
                   <td>
-                    <a href="{{route('view_quote_details',$value->id)}}"><button class="btn btn-sm btn-warning text-white">View</button></a>
+                    <a href="{{route('invoice_details',$value->id)}}"><button class="btn btn-sm btn-warning text-white">View</button></a>
                   </td>
                 </tr>
                   

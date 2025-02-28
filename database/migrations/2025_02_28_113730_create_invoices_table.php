@@ -11,8 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('quotes', function (Blueprint $table) {
+        Schema::create('invoices', function (Blueprint $table) {
             $table->id();
+            $table->string('quote_id');
             $table->string('customer_id');
             $table->string('billing_address');
             $table->string('shipping_address');
@@ -30,7 +31,6 @@ return new class extends Migration
             $table->string('perfoma_invoice')->nullable();
             $table->string('invoice')->nullable();
             $table->string('user_id');
-
             $table->timestamps();
         });
     }
@@ -40,6 +40,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('quotes');
+        Schema::dropIfExists('invoices');
     }
 };
