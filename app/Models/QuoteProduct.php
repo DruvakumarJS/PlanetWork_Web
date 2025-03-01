@@ -14,4 +14,8 @@ class QuoteProduct extends Model
     	'tax',
     	'amount'
     ];
+
+    public function product_details(){
+    	return $this->belongsTo(Product::class,'product_id','id');
+    }
 }

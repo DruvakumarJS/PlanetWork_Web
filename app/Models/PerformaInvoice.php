@@ -32,6 +32,15 @@ class PerformaInvoice extends Model
     }
 
     public function products(){
-    	return $this->hasMany(QuoteProduct::class);
+    	return $this->hasMany(QuoteProduct::class,'quote_id','quote_id');
     }
+
+    public function billing_address(){
+    	return $this->hasOne(Address::class, 'billing_address','id');
+    }
+
+    public function shipping_address(){
+    	return $this->hasOne(Address::class, 'shipping_address','id');
+    }
+
 }

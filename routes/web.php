@@ -60,6 +60,8 @@ Route::get('/convert-to-invoice/{id}', [CustomerController::class, 'convert_to_i
 
 Route::get('/performa-invoices', [CustomerController::class, 'performa_invoice'])->name('performa_invoice');
 Route::get('/view-performa-invoice_details/{id}', [CustomerController::class, 'performa_invoice_details'])->name('performa_invoice_details');
+Route::get('/generate_profoma_invoice/{id}', [CustomerController::class, 'generate_profoma_invoice'])->name('generate_profoma_invoice');
+
 
 Route::get('/invoices', [CustomerController::class, 'invoice'])->name('invoice');
 Route::get('/invoices-details/{id}', [CustomerController::class, 'invoice_details'])->name('invoice_details');

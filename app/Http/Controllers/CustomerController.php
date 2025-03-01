@@ -12,6 +12,7 @@ use App\Models\QuoteProduct;
 use App\Models\PerformaInvoice;
 use App\Models\Invoice;
 use Auth;
+use PDF;
 
 class CustomerController extends Controller
 {
@@ -498,11 +499,30 @@ class CustomerController extends Controller
     }
 
     public function performa_invoice_details($id){
-        $quoteData = Quote::where('id',$id)->where('user_id',Auth::user()->id)->first();
+        $quoteData = PerformaInvoice::where('id',$id)->where('user_id',Auth::user()->id)->first();
         $data = Customer::where('id',$quoteData->customer_id)->first();
         $products = Product::get();
         return view('pinvoice.details',compact('data','quoteData','products'));
+        
+        
+        /*$quoteData = PerformaInvoice::where('id',$id)->where('user_id',Auth::user()->id)->first();
+        $billingaddress = Address::where('id',$quoteData->billing_address)->first();
+        $shippingaddress = Address::where('id',$quoteData->billing_address)->first();
+         return view('pdf.profoma_invoice',compact('data','quoteData','products','billingaddress','shippingaddress'));*/
 
+    }
+
+    public function generate_profoma_invoice($id){
+       
+        $quoteData = PerformaInvoice::where('id',$id)->where('user_id',Auth::user()->id)->first();
+        $billingaddress = Address::where('id',$quoteData->billing_address)->first();
+        $shippingaddress = Address::where('id',$quoteData->billing_address)->first();
+
+        $data = ['quoteData' => $quoteData , 'billingaddress'=> $billingaddress , 'shippingaddress' => $shippingaddress];
+     
+        $pdf = PDF::loadView('pdf/profoma_invoice', $data);
+
+        return $pdf->download('document.pdf');
     }
 
 
@@ -546,7 +566,7 @@ class CustomerController extends Controller
     }
 
     public function invoice_details($id){
-        $quoteData = Quote::where('id',$id)->where('user_id',Auth::user()->id)->first();
+        $quoteData = Invoice::where('id',$id)->where('user_id',Auth::user()->id)->first();
         $data = Customer::where('id',$quoteData->customer_id)->first();
         $products = Product::get();
         return view('invoices.details',compact('data','quoteData','products'));

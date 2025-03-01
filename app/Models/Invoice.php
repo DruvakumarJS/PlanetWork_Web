@@ -32,6 +32,6 @@ class Invoice extends Model
     }
 
     public function products(){
-    	return $this->hasMany(QuoteProduct::class);
+    	return $this->hasMany(QuoteProduct::class,'quote_id','quote_id');
     }
 }
