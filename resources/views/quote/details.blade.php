@@ -265,7 +265,7 @@
     <textarea class="form-control" name="tc" style="min-height: 100px;" readonly>{{$quoteData->terms}}</textarea>
   </div>
 
-  <div class="py-4">
+ <!--  <div class="py-4">
     @if($quoteData->perfoma_invoice != '1')
      <a href="{{route('convert_to_pi',$quoteData->id)}}">
         <button type="submit" class="btn btn-dark" name="btn_name" >Convert to Proforma Invoice</button>
@@ -276,6 +276,18 @@
         <button type="submit" class="btn btn-dark" name="btn_name" >Convert to  Invoice</button>
     </a>
     @endif
+  </div> -->
+
+   <div class="py-4">
+    
+     <a href="{{route('convert_to_pi',$quoteData->id)}}">
+        <button type="submit" class="btn btn-dark" name="btn_name" >Convert to Proforma Invoice</button>
+    </a>
+   
+     <a href="{{route('convert_to_invoice',$quoteData->id)}}">
+        <button type="submit" class="btn btn-dark" name="btn_name" >Convert to  Invoice</button>
+    </a>
+    
   </div>
 
 

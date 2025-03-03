@@ -79,7 +79,7 @@
         <table class="header-table">
             <tr>
                 <td>
-                    <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('images/logo.png'))) }}" alt="Logo">
+                     <img src="data:image/png;base64,{{ base64_encode(file_get_contents(public_path('images/logo.png'))) }}" alt="Logo">
 
                     <h4>Planetwork Technologies Pvt Ltd</h4>
                     <span>Company ID: U72200KA2006PTC040171</span><br>
@@ -88,7 +88,7 @@
                     <span>GSTIN: 29AACCN3614L1ZA</span><br>
                 </td>
                 <td style="text-align:right;">
-                    <h2>PROFORMA INVOICE</h2>
+                    <h2>INVOICE</h2>
                     <span><strong>Invoice Date:</strong> {{ date('d M Y', strtotime($quoteData['quote_date'])) }}</span><br>
                     <span><strong>Due Date:</strong> {{ date('d M Y', strtotime($quoteData['expiry_date'])) }}</span><br>
                     <span><strong>PO:</strong> {{ $quoteData['quote_number'] }}</span><br>

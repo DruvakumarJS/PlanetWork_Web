@@ -65,6 +65,7 @@ Route::get('/generate_profoma_invoice/{id}', [CustomerController::class, 'genera
 
 Route::get('/invoices', [CustomerController::class, 'invoice'])->name('invoice');
 Route::get('/invoices-details/{id}', [CustomerController::class, 'invoice_details'])->name('invoice_details');
+Route::get('/generate_invoice/{id}', [CustomerController::class, 'generate_invoice'])->name('generate_invoice');
 
 
 

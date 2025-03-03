@@ -573,6 +573,19 @@ class CustomerController extends Controller
 
     }
 
+    public function generate_invoice($id){
+       
+        $quoteData = PerformaInvoice::where('id',$id)->where('user_id',Auth::user()->id)->first();
+        $billingaddress = Address::where('id',$quoteData->billing_address)->first();
+        $shippingaddress = Address::where('id',$quoteData->billing_address)->first();
+
+        $data = ['quoteData' => $quoteData , 'billingaddress'=> $billingaddress , 'shippingaddress' => $shippingaddress];
+     
+        $pdf = PDF::loadView('pdf/invoice', $data);
+
+        return $pdf->download('document.pdf');
+    }
+
 
 
    

@@ -27,7 +27,7 @@
     <div class="d-flex">
        <label class="bold">Invoice Details</label>
        <div class="ms-auto">
-          <a href=""><button class="btn btn-sm btn-dark">Download</button></a>
+          <a href="{{route('generate_invoice',$quoteData->id)}}"><button class="btn btn-sm btn-dark">Download</button></a>
        </div>
     </div>
 </div>  
