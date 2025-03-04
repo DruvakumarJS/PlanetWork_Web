@@ -31,7 +31,7 @@
 </div>  
 
 <div class="py-4">
-  <div class="row">
+  <!-- <div class="row">
     <div class="col-6">
       <label class="font-small">Search Customer</label>
       <div class="input-group mb-3">
@@ -43,7 +43,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
   <label class="font1-bold py-2">Customer Type </label> <label class="font-small ms-2 border rounded-3 p-1 text-info copy-billing text-black bg-card-blue" style="cursor: pointer;">{{$data->customer_type}}</label>
     <div class="py-4">
       <div class="card p-3 border-0 bg-card-blue">

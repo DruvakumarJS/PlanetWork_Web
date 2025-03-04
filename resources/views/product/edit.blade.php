@@ -136,7 +136,7 @@
 
              </div>
 
-             <div class="col-4">
+             <div class="col-4 mt-5">
                 <div class="card justify-content-center text-center" style="height: 400px; width: 400px; cursor: pointer;">
                   <input type="file" id="imageInput" name="image" accept="image/*" style="display: none;" />
                   

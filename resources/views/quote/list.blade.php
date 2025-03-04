@@ -5,9 +5,7 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="container-header">
-          <div id="div2">
-            <a href=""><button class="btn btn-outline-secondary">Quotations</button></a>
-          </div>
+         
            
           <div id="div2" style="margin-right: 30px">
            <form method="GET" action="">

@@ -51,12 +51,12 @@
                         <label>Total Employees</label>
                     </div>
 
-                    <div class="col">
+                    <div class="col mt-2">
                         <h4 class="font-numbers">78</h4>
                         <label>Logged In Today</label>
                     </div>
 
-                    <div class="col">
+                    <div class="col mt-2">
                         <h4 class="font-numbers">04</h4>
                         <label>Today Leave</label>
                     </div>
