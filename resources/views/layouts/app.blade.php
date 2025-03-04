@@ -20,8 +20,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 
     <!-- Styles -->
-    <link href="{{ env('APP_URL') }}/css/app.css" rel="stylesheet">
-    <link href="{{ env('APP_URL') }}/css/style.css" rel="stylesheet">
+    <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/style.css') }}" rel="stylesheet">
+
     
     <script src="{{ env('APP_URL') }}/js/common.js" defer></script>
     
