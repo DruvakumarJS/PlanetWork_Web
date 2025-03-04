@@ -24,7 +24,7 @@
     <link href="{{ asset('css/style.css') }}" rel="stylesheet">
 
     
-    <script src="{{ asset('/js/common.js') }}" defer></script>
+    <script src="{{ asset('js/common.js') }}" defer></script>
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
      <!-- Jquery -->
@@ -113,7 +113,7 @@
        
         <a class="pt-3" href=""><label class="font-small">CRM</label></a>
 
-        <a href="{{route('customers')}}"><img src="/images/Customer.svg"> <label class="ms-2 font1">Customer</label> </a>
+        <a href="{{route('customers')}}"><img src="/images/customer.svg"> <label class="ms-2 font1">Customer</label> </a>
 
         <a href="{{ route('products')}}"><img src="/images/product.svg"> <label class="ms-2 font1">Products</label> </a>
 
